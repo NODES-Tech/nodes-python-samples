@@ -1,4 +1,4 @@
-__author__ = 'sre'
+__author__ = 'steinarruneeriksen'
 from rauth import OAuth2Service
 from enum import Enum
 import json
@@ -11,7 +11,7 @@ class Environment(Enum):  #Old fashion Python 2.7 enum
 base_urls={
     Environment.MockData:"https://api-test-mock.nodesmarket.com",
     Environment.DevTest:"https://api-test.nodesmarket.com",
-    Environment.ExtTest:"https://api-acc.nodesmarket.com"
+    Environment.ExtTest:"https://api-extern-test.nodesmarket.com"
 }
 
 access_token_urls={
@@ -42,7 +42,8 @@ class NodesSession:
 
     def getHeader(self):
         return {'Authorization': 'Bearer','Accept': 'application/json'}
-
+    def getPostHeader(self):
+        return {'Authorization': 'Bearer','DataServiceVersion':'3.0','Content-Type':'application/json'}
     def getBaseUrl(self):
         return base_urls[self.envir_id]
 

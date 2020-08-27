@@ -23,6 +23,35 @@ class NodesAsset:
         self.lastModified=n.strftime('%Y-%m-%dT%H:%M:%S.%f')
         self.lastModifiedByUserId=""
 
+class NodesAssetPortfolioAssignment:
+    def __init__(self, assetPortfolioId, assetGridAssignmentId):
+        n=datetime.now()
+        self.id = None
+        self.assetPortfolioId=assetPortfolioId
+        self.assetGridAssignmentId=assetGridAssignmentId
+        self.status="Received"
+        self.created=n.strftime('%Y-%m-%dT%H:%M:%S.%f')
+        self.createdByUserId=""
+        self.lastModified=n.strftime('%Y-%m-%dT%H:%M:%S.%f')
+        self.lastModifiedByUserId=""
+
+class NodesAssetPortfolio:
+
+    def __init__(self, assetPortfolioName="Portfolio"):
+        n=datetime.now()
+        self.id = None
+        self.name=assetPortfolioName
+        self.comments=""
+        self.assetTypeIds=[]
+        self.managedByOrganizationId=""  #Company of asset portfolio owner.
+        self.renewableType="Mixed"
+        self.externalReference=""
+        self.status="Active"
+        self.created=n.strftime('%Y-%m-%dT%H:%M:%S.%f')
+        self.createdByUserId=""
+        self.lastModified=n.strftime('%Y-%m-%dT%H:%M:%S.%f')
+        self.lastModifiedByUserId=""
+
 
 
 class NodesConnectedAsset:

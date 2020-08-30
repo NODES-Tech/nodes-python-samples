@@ -150,4 +150,4 @@ for key in gnodeMap.keys():
                 result = session.getHandle().post(session.getBaseUrl() + "/orders", headers=session.getPostHeader(),
                                                   data=jsonStr.encode('utf-8'))
                 print result  #Expecting 200 / OK
-                exit()
+

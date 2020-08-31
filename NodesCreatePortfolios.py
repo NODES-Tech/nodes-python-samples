@@ -20,13 +20,9 @@ def locateCompanyOfUser(userId):
     #Lookup memberships
     result = session.getHandle().get(session.getBaseUrl() + "/memberships?userId=" + myUserId,
                                      headers=session.getHeader())
-
-    # User have memberships that are visualized through company's subscriptions (FSP, BRP etc)
-    for memships in result.json()['items']:  # At the moment could have multiple....  future model will simplify with direct link to organization
-        subsid = memships['subscriptionId']
-        result = session.getHandle().get(session.getBaseUrl() + "/subscriptions/" + subsid,
-                                         headers=session.getHeader())
-        orgId = result.json()['ownerOrganizationId']
+    for memships in result.json()['items']:
+        orgId = memships['organizationId']
+        #Could be linked to multiple organization. For simplicity select the last one...
     return orgId
 
 def lookupAssetNameAndId(href):  #lookup from AssetGridAssignment->Asset link
@@ -136,7 +132,7 @@ for key in currentPortfolios.keys():
     #print  json.dumps(result.json(), indent=2)
     #This will fail if there are orders/baselines connected to this portfolio
 
-
+exit()
 # Create one portfolio for every Grid Node where we have assets, and add these assets to portfolio
 for key in gnodeMap.keys():
     gridNodeName= gnodeMap[key]['name']

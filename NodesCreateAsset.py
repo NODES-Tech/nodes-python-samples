@@ -20,12 +20,9 @@ def locateCompanyOfUser(userId):
     #Lookup memberships
     result = session.getHandle().get(session.getBaseUrl() + "/memberships?userId=" + myUserId,
                                      headers=session.getHeader())
-    # User have memberships that are visualized through company's subscriptions (FSP, BRP etc)
-    for memships in result.json()['items']:  # At the moment could have multiple....  future model will simplify with direct link to organization
-        subsid = memships['subscriptionId']
-        result = session.getHandle().get(session.getBaseUrl() + "/subscriptions/" + subsid,
-                                         headers=session.getHeader())
-        orgId = result.json()['ownerOrganizationId']
+    for memships in result.json()['items']:
+        orgId = memships['organizationId']
+        #Could be linked to multiple organization. For simplicity select the last one...
     return orgId
 
 result = session.getHandle().get(session.getBaseUrl() + "/users/current", headers=session.getHeader())

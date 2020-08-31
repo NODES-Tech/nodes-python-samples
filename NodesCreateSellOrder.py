@@ -26,25 +26,20 @@ def locateDsoIdFromGridArea(gridAreaName):
 
 def lookupMarketProps(marketId):
     result = session.getHandle().get(session.getBaseUrl() + "/markets", headers=session.getHeader())
-    #print   json.dumps(result.json(), indent=2)
     for item in result.json()['items']:
         if item['id']==marketId:
-
             name= item['name']
             blocksize= item['minimumBlockSizeInSeconds']
             timeZone=item['timeZone']
             return name, blocksize, timeZone
-    return "", 0
+    return "", 0, ""
+
 def lookupMarket(gridNodeId):
     result = session.getHandle().get(session.getBaseUrl() + "/gridlocations", headers=session.getHeader())
     for item in result.json()['items']:
         if item['gridNodeId']==gridNodeId:
-            #print "Found grid location"
-            #print item
             marketId= item['marketId']
-
             marketName, blockSize, timeZone=lookupMarketProps(marketId)
-
             return marketId, marketName,blockSize, timeZone
     return "","", "",""
 
@@ -53,12 +48,9 @@ def locateCompanyOfUser(userId):
     #Lookup memberships
     result = session.getHandle().get(session.getBaseUrl() + "/memberships?userId=" + myUserId,
                                      headers=session.getHeader())
-    # User have memberships that are visualized through company's subscriptions (FSP, BRP etc)
-    for memships in result.json()['items']:  # At the moment could have multiple....  future model will simplify with direct link to organization
-        subsid = memships['subscriptionId']
-        result = session.getHandle().get(session.getBaseUrl() + "/subscriptions/" + subsid,
-                                         headers=session.getHeader())
-        orgId = result.json()['ownerOrganizationId']
+    for memships in result.json()['items']:
+        orgId = memships['organizationId']
+        #Could be linked to multiple organization. For simplicity select the last one...
     return orgId
 
 result = session.getHandle().get(session.getBaseUrl() + "/users/current", headers=session.getHeader())
@@ -136,7 +128,7 @@ for key in gnodeMap.keys():
             for price in [300,305,310]:  #Putting in multiple offers at different prices
                 print "Selling 0.250MW @ " + str(price+ addon) + "NOK on ", portfolio['PortfolioName'], " in ", portfolio['MarketName']
                 curr=datetime.now()    #Buy given hour tomorrow
-                start=datetime(curr.year,curr.month, curr.day, hour, 0, 0, 0)  +timedelta(days=1)
+                start=datetime(curr.year,curr.month, curr.day, hour, 0, 0, 0)  +timedelta(days=3)
                 end=start+ timedelta(seconds=portfolio['MarketBlockSize'])   #Set end period= blocksize
                 nsell = NodesSellOrder(price+ addon, 0.25, convTimeToUtc(start), convTimeToUtc(end))  # Time must be specified in UTC
                 nsell.lastModifiedByUserId=myUserId

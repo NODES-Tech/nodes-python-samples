@@ -98,32 +98,37 @@ for item in result.json()['items']:
         portfolioObj['GridNodeId'] = asset['GridNodeId']
         try:
             gnode=gnodeMap[portfolioObj['GridNodeId']]
-            gnode['portfolios'].append(portfolioObj)
         except:
-            gnodeMap[portfolioObj['GridNodeId']]={'portfolios':[]}
-            gnodeMap[portfolioObj['GridNodeId']]['portfolios'].append(portfolioObj)
+            gnodeMap[portfolioObj['GridNodeId']]={'portfolios':{}}
+            gnode = gnodeMap[portfolioObj['GridNodeId']]
+
+        #tradable portfolios contain all portfolios in total for FSP. now assign only those objects under this grid node
+        try:
+            pObj=gnode['portfolios'][item['assetPortfolioId']]
+        except:
+            gnode['portfolios'][item['assetPortfolioId']]=portfolioObj
     except:
         pass #Was not our portfolio
-
 
 
 #Lookup markets for the different tradable locations
 for key in gnodeMap.keys():
     gnodeObj=gnodeMap[key]
     marketId, marketName,blockSize, timeZone=lookupMarket(key)
-    for portfolio in gnodeObj['portfolios']:
+    for key2 in gnodeObj['portfolios'].keys():
+        portfolio=gnodeObj['portfolios'][key2]
         portfolio['MarketId'] = marketId
         portfolio['MarketName'] = marketName
         portfolio['MarketBlockSize'] = blockSize
         portfolio['MarketTimeZone'] = timeZone
         print  marketName, portfolio['MarketTimeZone']
-    print gnodeObj
+    #print gnodeObj
 
 for key in gnodeMap.keys():
     gnodeObj=gnodeMap[key]
-    addon=-1
-    for portfolio in gnodeObj['portfolios']:
-        addon+=1  # just to put the offers from portfolios in step wise prices
+    addon=0
+    for key2 in gnodeObj['portfolios'].keys():
+        portfolio = gnodeObj['portfolios'][key2]
         for hour in range(8,20):   #Putting in sell orders for all hours in range
             for price in [300,305,310]:  #Putting in multiple offers at different prices
                 print "Selling 0.250MW @ " + str(price+ addon) + "NOK on ", portfolio['PortfolioName'], " in ", portfolio['MarketName']
@@ -141,5 +146,5 @@ for key in gnodeMap.keys():
                 #print  jsonStr
                 result = session.getHandle().post(session.getBaseUrl() + "/orders", headers=session.getPostHeader(),
                                                   data=jsonStr.encode('utf-8'))
-                print result  #Expecting 200 / OK
-
+                #print result  #Expecting 200 / OK
+        addon+=1  # just to put the offers from portfolios in step wise prices

@@ -7,23 +7,28 @@ class Environment(Enum):  #Old fashion Python 2.7 enum
     MockData=1
     DevTest=2
     ExtTest=3
+    Production=4
 
 base_urls={
     Environment.MockData:"https://api-test-mock.nodesmarket.com",
     Environment.DevTest:"https://api-test.nodesmarket.com",
-    Environment.ExtTest:"https://api-extern-test.nodesmarket.com"
+    Environment.ExtTest:"https://api-extern-test.nodesmarket.com",
+    Environment.Production:"https://api.nodesmarket.com"
 }
 
 access_token_urls={
     Environment.MockData:"https://login.microsoftonline.com/nodestechdev.onmicrosoft.com/oauth2/v2.0/token/",
     Environment.DevTest:"https://login.microsoftonline.com/nodestechdev.onmicrosoft.com/oauth2/v2.0/token/",
-    Environment.ExtTest:"https://login.microsoftonline.com/nodestechprd.onmicrosoft.com/oauth2/v2.0/token/"
+    Environment.ExtTest:"https://login.microsoftonline.com/nodestechprd.onmicrosoft.com/oauth2/v2.0/token/",
+    Environment.Production:"https://login.microsoftonline.com/nodestechprd.onmicrosoft.com/oauth2/v2.0/token/"
+
 }
 
 scopes={
     Environment.MockData:"https://nodestechdev.onmicrosoft.com/devNodesApi/.default",
     Environment.DevTest:"https://nodestechdev.onmicrosoft.com/devNodesApi/.default",
-    Environment.ExtTest:"https://nodestechprd.onmicrosoft.com/apinodesmarket/.default"
+    Environment.ExtTest:"https://nodestechprd.onmicrosoft.com/apinodesmarket/.default",
+    Environment.Production:"https://nodestechprd.onmicrosoft.com/apinodesmarket/.default"
 }
 
 class NodesSession:

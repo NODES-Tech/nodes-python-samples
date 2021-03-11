@@ -121,6 +121,48 @@ class NodesSellOrder:  # Order for FSP with portfolio to sell
         self.lastModifiedByUserId= ""
 
 
+class NodesBuyOrder:  # Order for DSO
+    def __init__(self, price, quantity, periodFrom, periodUntil):
+        currTime=datetime.now()
+        #self.completionType="Filled"
+        self.ownerOrganizationId=""
+        self.validFrom=currTime.strftime('%Y-%m-%dT%H:%M:%S.%f')
+        # By defailt let order be active until delivery starts
+        self.validTo = periodFrom.strftime('%Y-%m-%dT%H:%M:%S.%f')
+        self.gridNodeId= ""
+        self.marketId=""
+        self.side= "Buy"
+        self.comments=""
+        self.externalReference=""  # used if a link to corresponding order in external market is to be tracked
+        self.fillType="Normal"
+        self.regulationType= "Up"
+        self.priceType= "Limit"
+        self.quantity=quantity
+        self.unitPrice= price
+        #self.unitPrice= 300
+        self.originalOrderId= 0
+        self.originalQuantity= 0
+        self.quantityCompleted= 0
+        self.blockSizeInSeconds=3600
+        self.maxBlocks= 1
+        self.adjacentBlocks= 1
+        self.restBlocks=0
+        self.periodFrom=periodFrom.strftime('%Y-%m-%dT%H:%M:%S.%f')
+        self.periodTo=periodUntil.strftime('%Y-%m-%dT%H:%M:%S.%f')
+        self.limitedToAssetTypeIds=[]
+        self.renewableType= "Renewable"
+        self.minRampUpRate= 0
+        self.maxRampUpRate= 0
+        self.minRampDownRate=0
+        self.maxRampDownRate=0
+        self.quantityType="Power"
+        #self.id=""
+        #self.status= "Received"
+        self.created=currTime.strftime('%Y-%m-%dT%H:%M:%S.%f')
+        self.createdByUserId= ""
+        self.lastModified=currTime.strftime('%Y-%m-%dT%H:%M:%S.%f')
+        self.lastModifiedByUserId= ""
+
 if __name__ == "__main__":
     a=NodesAsset()
     jsonStr = json.dumps(a.__dict__)
